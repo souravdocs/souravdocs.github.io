@@ -123,8 +123,8 @@
     function generateQRCode() {
       const upiAddress = document.getElementById('upiAddress').value;
 
-      // Regular expression to validate UPI address (something@upi format)
-      const upiRegex = /^[a-zA-Z0-9._%+-]+@upi$/;
+      // Regular expression to validate UPI address (handles with any domain after @)
+      const upiRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$/;
 
       if (upiRegex.test(upiAddress)) {
         const qrCodeContainer = document.getElementById('qrCodeContainer');
@@ -146,7 +146,7 @@
           downloadLink.href = qrImage.src; // Set the download link to the QR image
         };
       } else {
-        alert('Please enter a valid UPI address in the format "something@upi".');
+        alert('Please enter a valid UPI address in the format "something@domain".');
       }
     }
   </script>
