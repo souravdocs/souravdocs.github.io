@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BHIM QR CODE</title>
+  <title>UPI QR Code Generator</title>
   <style>
     /* Reset some basic styles */
     * {
@@ -110,27 +110,43 @@
     <button onclick="generateQRCode()">Generate QR Code</button>
 
     <div class="qr-code" id="qrCodeContainer"></div>
+    <a id="downloadLink" href="#" download style="display:none;">
+      <button>Download QR Code</button>
+    </a>
   </div>
 
   <footer>
     <p>Made with ❤️ by <span>Sourav</span></p>
-    
-    <p>Copyright @2025</p>
   </footer>
 
   <script>
     function generateQRCode() {
       const upiAddress = document.getElementById('upiAddress').value;
-      if (upiAddress) {
+
+      // Regular expression to validate UPI address (something@upi format)
+      const upiRegex = /^[a-zA-Z0-9._%+-]+@upi$/;
+
+      if (upiRegex.test(upiAddress)) {
         const qrCodeContainer = document.getElementById('qrCodeContainer');
+        const downloadLink = document.getElementById('downloadLink');
+        
         qrCodeContainer.innerHTML = ''; // Clear previous QR code
+        downloadLink.style.display = 'none'; // Hide the download button
 
         // Generate the QR code image using an API
         const qrImage = document.createElement('img');
         qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent('upi://pay?pa=' + upiAddress)}&size=300x300`;
+
         qrCodeContainer.appendChild(qrImage);
+
+        // Provide a download link
+        qrImage.onload = function() {
+          // Create a temporary download link
+          downloadLink.style.display = 'inline-block';
+          downloadLink.href = qrImage.src; // Set the download link to the QR image
+        };
       } else {
-        alert('Please enter a valid UPI address');
+        alert('Please enter a valid UPI address in the format "something@upi".');
       }
     }
   </script>
